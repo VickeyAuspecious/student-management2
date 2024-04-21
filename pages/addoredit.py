@@ -3,13 +3,13 @@ import pandas as pd
 
 # Function to view Excel file and delete selected rows
 def view_excel():
-    st.title("View Excel File")
+    st.title("Students Data")
     # Read Excel file from folder
     file_path = "pages/students.xlsx"
     df = pd.read_excel(file_path)
     
     # Display DataFrame as table
-    st.write("### DataFrame:")
+    st.write("###")
     rows_to_delete = st.multiselect("Select rows to delete", df.index.tolist())
     if st.button("Delete Selected Rows"):
         df.drop(rows_to_delete, inplace=True)
@@ -22,6 +22,7 @@ def view_excel():
 def add_student():
     st.title("Add New Student")
     # Input form for new student details
+    student_id = st.text_input("Student ID")
     name = st.text_input("Name")
     age = st.number_input("Age", min_value=0, max_value=150)
     course = st.text_input("Course")
@@ -32,7 +33,8 @@ def add_student():
 
     if st.button("Save"):
         # Add new student to DataFrame
-        new_student = pd.DataFrame({"Name": [name],
+        new_student = pd.DataFrame({"Student ID": [student_id],
+                                    "Name": [name],
                                     "Age": [age],
                                     "Course": [course],
                                     "CGPA": [cgpa],
@@ -44,17 +46,18 @@ def add_student():
         try:
             df = pd.read_excel(file_path)
         except FileNotFoundError:
-            df = pd.DataFrame(columns=["Name", "Age", "Course", "CGPA", "Hosteller/Day Scholar", "Transport", "Fee Pendings"])
+            df = pd.DataFrame(columns=["Student ID", "Name", "Age", "Course", "CGPA", "Hosteller/Day Scholar", "Transport", "Fee Pendings"])
         df = pd.concat([df, new_student], ignore_index=True)
         df.to_excel(file_path, index=False)
         st.success("New student added successfully!")
 
+
 def main():
     # Create a navigation menu
-    menu = ["View Excel File", "Add Student"]
+    menu = ["Students Data", "Add Student"]
     choice = st.sidebar.selectbox("Menu", menu)
 
-    if choice == "View Excel File":
+    if choice == "Students Data":
         view_excel()
     elif choice == "Add Student":
         add_student()

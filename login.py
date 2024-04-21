@@ -20,6 +20,7 @@ def login_page():
     if st.button('Login'):
         if user_exists(username, password):
             st.success('Logged in successfully')
+            
             return True
         else:
             st.error('Invalid username or password')
